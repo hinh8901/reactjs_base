@@ -8,12 +8,10 @@ import logger from "redux-logger"
 import reduxSaga from "@/reduxSaga"
 import { CurriedGetDefaultMiddleware } from "@reduxjs/toolkit/dist/getDefaultMiddleware"
 import { testReducer } from "@/reduxSaga/TestRedux"
-import { commonReducer } from "@/reduxSaga/Common"
 import { authReducer } from "@/reduxSaga/Auth"
 
 const reducers = {
   test: testReducer,
-  common: commonReducer,
   auth: authReducer,
   // import and place reducer here
 }
@@ -26,7 +24,7 @@ const sagaMiddleware = createSagaMiddleware()
 // mount it on the Store
 export const store = configureStore({
   reducer: rootReducers,
-  middleware: new MiddlewareArray().concat(sagaMiddleware, logger)
+  middleware: new MiddlewareArray().concat(sagaMiddleware)
 })
 
 // then run the saga

@@ -1,13 +1,12 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Send from '@mui/icons-material/Send'
 
 import { useAppDispatch, useAppSelector } from '@/hooks/useAppSelector'
-import { CommonActions } from '@/reduxSaga/Common'
 import { AuthActions } from '@/reduxSaga/Auth'
 import Sidebar from '@/layouts/partials/Sidebar'
 import { globalLoading } from '@/components/GlobalLoading'
-import CommonModal from '@/components/Modals/CommonModal'
-import Alert from '@/components/Modals/partials/Alert'
+import { globalModal } from '@/components/Modals/GlobalModal'
+import { DialogContentText } from '@mui/material'
 
 const Home = () => {
   const { isSignedIn } = useAppSelector(state => state.auth)
@@ -73,38 +72,30 @@ const Home = () => {
   }
 
   const openGlobalModal = () => {
-    dispatch(CommonActions.openGlobalModal({
-      children: <div
-        style={{ height: "100%", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    globalModal.open({
+      title: "ThisKw's Modal",
+      children: (
         <div
-          style={{ height: 200, width: 200, background: "lightblue" }}
-          onClick={() => dispatch(CommonActions.closeGlobalModal({}))}>
-          <h1>GlobalModal: Click to Close</h1>
+          style={{ height: "100%", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div>
+            <h1 onClick={() => console.log("flow: click")}>GlobalModal: Click to Close</h1>
+          </div>
         </div>
-      </div>,
-      onClose: (event: any, reason: any) => {
-        console.log("flow: ", event, reason)
-      },
-      closeAfterTransition: true
-    }))
+      )
+    })
   }
 
   const openAlert = () => {
-    // dispatch(CommonActions.openGlobalModal({
-    //   children: (
-    //     <CommonModal
-    //       title="Use Google's location service?"
-    //       okText="Đồng ý"
-    //       cancelText="Hủy bỏ"
-    //       onCancel={() => dispatch(CommonActions.closeGlobalModal({}))}
-    //       onOk={() => dispatch(CommonActions.closeGlobalModal({}))}
-    //     >
-    //       <Alert>
-    //         Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.
-    //       </Alert>
-    //     </CommonModal>
-    //   )
-    // }))
+    globalModal.open({
+      title: "Use Google's location service?",
+      okText: "Đồng ý",
+      cancelText: "Hủy bỏ",
+      footer: null,
+      closable: false,
+      children: (
+        <DialogContentText>Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.</DialogContentText>
+      )
+    })
   }
 
   return <div style={{ display: "flex" }}>

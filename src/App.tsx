@@ -3,7 +3,7 @@ import { BrowserRouter } from 'react-router-dom'
 
 import Navigation from './navigation'
 import GlobalLoading from './components/GlobalLoading'
-import GlobalModal from './components/Modals/GlobalModalSkeleton'
+import GlobalModal from './components/Modals/GlobalModal'
 
 const App = () => {
   return (

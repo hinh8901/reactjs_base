@@ -1,45 +1,53 @@
-import React from "react"
+import React, { isValidElement } from "react"
 import { Button } from "@mui/material"
 
-// import { AlertProps, COMPONENT_TYPE } from "../.."
+import { ActionProps } from "./types"
+import { ACTION_AREA, COMPONENT_TYPE } from "../../types"
 
-// interface ActionProps {
-//   action: AlertProps['action']
-//   okText: AlertProps['okText']
-//   onOk: AlertProps['onOk']
-//   cancelText: AlertProps['cancelText']
-//   onCancel: AlertProps['onCancel']
-// }
+const Action = (props: ActionProps) => {
+  const {
+    footer = COMPONENT_TYPE.DEFAULT,
+    okText = "OK",
+    cancelText = "Cancel",
+    onOk,
+    onCancel,
+    hiddenArea,
+    setConfig
+  } = props
+  const isCloseWhenClickCancelBtn = hiddenArea?.includes(ACTION_AREA.CANCEL_BUTTON)
+  const isCloseWhenClickAcceptBtn = hiddenArea?.includes(ACTION_AREA.ACCEPT_BUTTON)
 
-// const Action = (props: ActionProps) => {
-const Action = (props: any) => {
-  return <></>
-  // const {
-  //   action,
-  //   okText = "OK",
-  //   cancelText = "Cancel",
-  //   onOk,
-  //   onCancel
-  // } = props
+  const closeModal = () => {
+    setConfig(prev => ({ ...prev, open: false }))
+  }
 
-  // switch (action) {
-  //   case undefined:
-  //   case null:
-  //     return null
+  const handleOnCancel = () => {
+    onCancel && onCancel()
+    isCloseWhenClickCancelBtn && closeModal()
+  }
 
-  //   case COMPONENT_TYPE.DEFAULT:
-  //     return (
-  //       <>
-  //         {cancelText && <Button onClick={onCancel}>{cancelText}</Button>}
-  //         {okText && <Button onClick={onOk} autoFocus>{okText}</Button>}
-  //       </>
-  //     )
+  const handleOnOk = () => {
+    onOk && onOk()
+    isCloseWhenClickAcceptBtn && closeModal()
+  }
 
-  //   default: {
-  //     const ActionComponent = action
-  //     return <ActionComponent />
-  //   }
-  // }
+  switch (footer) {
+    case undefined:
+    case null:
+      return null
+
+    case COMPONENT_TYPE.DEFAULT:
+      return (
+        <>
+          {cancelText && <Button onClick={handleOnCancel}>{cancelText}</Button>}
+          {okText && <Button onClick={handleOnOk} autoFocus>{okText}</Button>}
+        </>
+      )
+
+    default:
+      if (isValidElement(footer)) return footer
+      return <>{footer}</>
+  }
 }
 
 export default Action
